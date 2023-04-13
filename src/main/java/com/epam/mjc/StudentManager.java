@@ -1,11 +1,16 @@
 package com.epam.mjc;
 
-
+class StudentNotFoundException extends IllegalArgumentException{
+  public StudentNotFoundException(String message, Throwable cause){
+    super(message, cause);
+  }
+}
 public class StudentManager {
 
   private static final long[] IDs = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
 
-  public Student find(long studentID) {
+  public Student find(long studentID) throws StudentNotFoundException
+  {
     return Student.getValueOf(studentID);
   }
 
@@ -13,9 +18,13 @@ public class StudentManager {
     StudentManager manager = new StudentManager();
 
     for (int i = 0; i < IDs.length; i++) {
-      Student student = manager.find(IDs[i]);
-      System.out.println("Student name " + student.getName());
-    }
+      try{
+        Student student = manager.find(IDs[i]);
+        System.out.println("Student name " + student.getName());
+      }catch (Exception ex){
+        System.err.print(new StudentNotFoundException("Could not find student with ID " + IDs[i], ex));
+      }
+   }
 
   }
 }
